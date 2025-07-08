@@ -17,6 +17,7 @@ public class Post {
         TEXT, IMAGE, VIDEO, REEL, STORY
     }
 
+
     // Constructors
     public Post() {}
 
