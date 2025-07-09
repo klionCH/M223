@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.username LIKE %:query% OR u.firstName LIKE %:query% OR u.lastName LIKE %:query%")
     List<User> searchUsers(@Param("query") String query);
 
-    @Query("SELECT u FROM User u WHERE u.isActive = true")
+    @Query("SELECT u FROM User u WHERE u.active = true")
     List<User> findActiveUsers();
 }

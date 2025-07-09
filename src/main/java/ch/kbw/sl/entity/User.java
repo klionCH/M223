@@ -2,8 +2,11 @@ package ch.kbw.sl.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -13,17 +16,23 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
+    @Column(unique = true, length = 100, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
+
+    private String token;
+
+    private long expiresIn;
+
+    private String username;
 
     private String firstName;
 
@@ -63,5 +72,34 @@ public class User {
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    // ======================
+    // UserDetails Interface
+    // ======================
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(); // falls du später Rollen einbaust, hier ersetzen
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // oder eigene Logik
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // oder eigene Logik
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // oder eigene Logik
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.active; // aktiviere/deaktiviere Account über dein active-Feld
     }
 }
